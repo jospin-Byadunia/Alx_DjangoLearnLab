@@ -1,4 +1,4 @@
-from library.models import Book
+from bookshelf.models import Book
 
 # Retrieve the book you created
 
