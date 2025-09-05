@@ -20,3 +20,12 @@ class LibraryDetailView(DetailView):
         # Add all books in this library
         context["books"] = self.object.books.all()
         return context
+    
+def login_view(request):
+    return render(request, "relationship_app/login.html") 
+
+def logout_view(request):
+    return render(request, "relationship_app/logout.html")
+
+def signup_view(request):
+    return render(request, "relationship_app/signup.html")
