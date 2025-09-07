@@ -9,8 +9,8 @@ urlpatterns = [
     path('book-list/', list_books, name='book_list'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
     path("register/", views.register, name="register"),   # <-- match the view name
-    path("login/", views.login_view, name="login"),
-    path("logout/", views.logout_view, name="logout"),
+    path("login/", LoginView.as_view(template_name="relationship_app/login.html"), name="login"),
+    path("logout/", LogoutView.as_view(template_name="relationship_app/logout.html"), name="logout"),
 ]
 
 #views.register
