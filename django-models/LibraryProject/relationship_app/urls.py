@@ -14,6 +14,9 @@ urlpatterns = [
     path("admin/", include("relationship_app.admin_view")),
     path("librarian/", include("relationship_app.librarian_view")),
     path("member/", include("relationship_app.member_view")),
+    path("add-book/", include("relationship_app.add_book_view")),
+    path("change-book/", include("relationship_app.change_book_view")),
+    path("delete-book/", include("relationship_app.delete_book_view")),
 ]
 
 #views.register
