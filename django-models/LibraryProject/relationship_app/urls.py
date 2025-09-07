@@ -11,6 +11,9 @@ urlpatterns = [
     path("register/", views.register, name="register"),   # <-- match the view name
     path("login/", LoginView.as_view(template_name="relationship_app/login.html"), name="login"),
     path("logout/", LogoutView.as_view(template_name="relationship_app/logout.html"), name="logout"),
+    path("admin/", include("relationship_app.admin_view")),
+    path("librarian/", include("relationship_app.librarian_view")),
+    path("member/", include("relationship_app.member_view")),
 ]
 
 #views.register
