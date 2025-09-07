@@ -30,3 +30,4 @@ class UserProfile(models.Model):
     role = models.CharField(choices=[('admin', 'Admin'),('member', 'Member'), ('librarian', 'Librarian')], max_length=20)
     def __str__(self):
         return f"{self.user.username}'s profile"
+        
