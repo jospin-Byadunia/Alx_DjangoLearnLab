@@ -181,3 +181,9 @@ CSRF_COOKIE_SECURE = True
 # Consider limiting cookie access to JavaScript
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True  # Usually not required but can be used for extra security
+
+
+
+# Tells Django the header that identifies a secure request
+# Only needed if your site is behind a proxy (like Nginx or Apache)
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
