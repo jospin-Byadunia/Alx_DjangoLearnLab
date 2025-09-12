@@ -1,12 +1,10 @@
 from django.shortcuts import render
 from django.views.generic.detail import DetailView
-from django.contrib.auth import login, logout
 from .models import Book
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import permission_required
+from .forms import ExampleForm
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -33,3 +31,13 @@ def search_books(request):
     # ORM automatically parameterizes queries to prevent SQL injection
     books = Book.objects.filter(title__icontains=query)
     return render(request, "bookshelf/view_book.html", {"books": books}) 
+
+def form_view(request):
+    if request.method == "POST":
+        form = ExampleForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('success_url')  # Replace with your success URL
+    else:
+        form = ExampleForm()
+    return render(request, 'bookshelf/form_template.html', {'form': form})
