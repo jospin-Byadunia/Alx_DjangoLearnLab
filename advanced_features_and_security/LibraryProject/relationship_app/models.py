@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.conf import settings
 
 
 # Create your models here.
@@ -34,8 +34,12 @@ class Librarian(models.Model):
         return self.name
     
 class UserProfile(models.Model):
-    user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
-    role = models.CharField(choices=[('admin', 'Admin'),('member', 'Member'), ('librarian', 'Librarian')], max_length=20)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    role = models.CharField(
+        choices=[('admin', 'Admin'), ('member', 'Member'), ('librarian', 'Librarian')],
+        max_length=20
+    )
+
     def __str__(self):
         return f"{self.user.username}'s profile"
     
