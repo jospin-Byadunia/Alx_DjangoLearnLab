@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Books List</h1>
+
+{% if books %}
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publication Year</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title|escape }}</td>
+            <td>{{ book.author|escape }}</td>
+            <td>{{ book.publication_year|escape }}</td>
+            <td>
+                <a href="{% url 'view_book' book.id %}">View</a> |
+                <a href="{% url 'edit_book' book.id %}">Edit</a> |
+                <a href="{% url 'delete_book' book.id %}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No books available.</p>
+{% endif %}
+
+<a href="{% url 'add_book' %}">Add New Book</a>
+
+{% endblock %}
