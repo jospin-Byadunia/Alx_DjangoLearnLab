@@ -26,4 +26,10 @@ def delete_book_view(request):
     return render(request, "bookshelf/delete_book.html")
 
 def view_book_view(request):
-    return render(request, "bookshelf/view_book.html")  
+    return render(request, "bookshelf/view_book.html") 
+
+def search_books(request):
+    query = request.GET.get("q", "")
+    # ORM automatically parameterizes queries to prevent SQL injection
+    books = Book.objects.filter(title__icontains=query)
+    return render(request, "bookshelf/view_book.html", {"books": books}) 
