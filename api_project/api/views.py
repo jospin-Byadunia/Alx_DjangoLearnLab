@@ -6,5 +6,5 @@ from rest_framework import generics
 
 
 class BookList(generics.ListCreateAPIView):
-    queryset = Book.all()
+    queryset = Book.objects.all()
     serializer_class = BookSerializer
