@@ -10,6 +10,11 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = '__all__'
 
+    def validate(self, data):
+        if data['publication_year'] > datetime.now().year:
+            raise serializers.ValidationError(
+                "Publication year cannot be in the future.")
+
 # Serializer for Author model with nested BookSerializer
 
 
@@ -19,8 +24,3 @@ class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
         fields = 'name'
-
-    def validate(self, data):
-        if data['publication_year'] > datetime.now().year:
-            raise serializers.ValidationError(
-                "Publication year cannot be in the future.")
