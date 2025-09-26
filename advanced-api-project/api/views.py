@@ -3,26 +3,26 @@ from rest_framework import generics
 from .models import Book, Author    
 from .serializers import BookSerializer, AuthorSerializer, serializers
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 # list all books
 
 class ListView(generics.ListAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes =[permissions.IsAuthenticatedOrReadOnly]
+    permission_classes =[IsAuthenticatedOrReadOnly]
 
 # detail view of a book
 class DetailView(generics.RetrieveAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes =[permissions.IsAuthenticatedOrReadOnly]
+    permission_classes =[IsAuthenticatedOrReadOnly]
     
 # Adding a new book
 class CreateView(generics.CreateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Allow any user (authenticated or not) to access this view
+    permission_classes = [IsAuthenticated]  # Allow any user (authenticated or not) to access this view
     
     def perform_create(self, serializer):
         title = serializer.validated_data.get("title")
@@ -36,7 +36,7 @@ class CreateView(generics.CreateAPIView):
 class UpdateView (generics.UpdateAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
     def perform_update(self, serializer):
         # Example: Only allow the original creator to edit the book
@@ -50,4 +50,4 @@ class UpdateView (generics.UpdateAPIView):
 class DeleteView (generics.DestroyAPIView):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]  # ✅ Only admins can delete
+    permission_classes = [IsAuthenticated]  # ✅ Only admins can delete
