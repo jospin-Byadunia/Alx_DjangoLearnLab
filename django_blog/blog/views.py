@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -55,20 +55,20 @@ def profile_view(request):
 #list view
 
 
-class PostListView(ListView, LoginRequiredMixin):
+class PostListView(ListView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['-published_date']
     paginate_by = 5
 
-class PostDetailView(DetailView, LoginRequiredMixin):
+class PostDetailView(DetailView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
 
-class PostCreateView(CreateView, LoginRequiredMixin):
+class PostCreateView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     template_name = 'blog/post_form.html'
     form_class = PostForm
@@ -77,13 +77,13 @@ class PostCreateView(CreateView, LoginRequiredMixin):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-class PostUpdateView(UpdateView, LoginRequiredMixin):
+class PostUpdateView(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     template_name = 'blog/post_form.html'
     form_class = PostForm
     success_url = reverse_lazy('blog:post_list')
 
-class PostDeleteView(DeleteView, LoginRequiredMixin):
+class PostDeleteView(DeleteView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('blog:post_list')
