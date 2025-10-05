@@ -1,0 +1,12 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+
+{% block content %}
+  <h2>Comment Detail</h2>
+  <p><strong>Post:</strong> {{ comment.post.title }}</p>
+  <p><strong>Author:</strong> {{ comment.author.username }}</p>
+  <p><strong>Content:</strong> {{ comment.content }}</p>
+  <p><strong>Created at:</strong> {{ comment.created_at }}</p>
+  
+  <a href="{% url 'blog:post_detail' comment.post.pk %}">Back to Post</a>
+{% endblock %}
