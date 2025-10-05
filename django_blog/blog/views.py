@@ -32,4 +32,13 @@ class registerView(CreateView):
 
 @login_required
 def profile_view(request):
-    return render(request, "blog/profile.html")
+    if request.method == "POST":
+        # update user profile info
+        request.user.first_name = request.POST.get("first_name", request.user.first_name)
+        request.user.last_name = request.POST.get("last_name", request.user.last_name)
+        request.user.email = request.POST.get("email", request.user.email)
+        request.user.save() 
+
+        return redirect("profile")  # refresh page after saving
+
+    return render(request, "blog/profile.html", {"user": request.user})
