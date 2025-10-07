@@ -1,14 +1,16 @@
 from rest_framework import serializers
-from .models import User
+from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.password_validation import validate_password
+from rest_framework.authtoken.models import Token
 
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'bio', 'profile_picture', 'followers', 'following']
-        
+
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
         required=True,
@@ -23,7 +25,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name')
+        fields = ('username', 'email', 'password', 'password2', 'first_name', 'last_name')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -39,8 +41,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         user.set_password(validated_data['password'])
         user.save()
-        return user
 
+        # Create DRF token
+        Token.objects.create(user=user)
+        return user
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
