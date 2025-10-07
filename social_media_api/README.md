@@ -59,3 +59,20 @@ Clone the repository:
 ```bash
 git clone <repository-url>
 cd social_media_api
+
+python -m venv venv
+# Windows
+venv\Scripts\activate
+# Linux / Mac
+source venv/bin/activate
+
+Posts API endpoint
+
+| Endpoint           | Method | Description                           |
+| ------------------ | ------ | ------------------------------------- |
+| `/api/posts/`      | GET    | List all posts                        |
+| `/api/posts/`      | POST   | Create a new post                     |
+| `/api/posts/{id}/` | GET    | Retrieve a single post                |
+| `/api/posts/{id}/` | PUT    | Update a post (author only)           |
+| `/api/posts/{id}/` | PATCH  | Partially update a post (author only) |
+| `/api/posts/{id}/` | DELETE | Delete a post (author only)           |
