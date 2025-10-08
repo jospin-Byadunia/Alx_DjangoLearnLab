@@ -1,18 +1,22 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import permissions
 from django.contrib.auth import authenticate
 from rest_framework.authtoken.models import Token
 from .serializers import RegisterSerializer, LoginSerializer, UserSerializer
 from .models import User
 from .serializers import UserSerializer as UserProfileSerializer
+from rest_framework import generics
 from django.shortcuts import get_object_or_404 
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import get_user_model
 
-class RegisterView(APIView):
-    permission_classes = [AllowAny]
+
+CustomUser = get_user_model()
+class RegisterView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -25,10 +29,9 @@ class RegisterView(APIView):
             "token": token.key
         }, status=status.HTTP_201_CREATED)
 
-#disable crff for login
 @method_decorator(csrf_exempt, name='dispatch')
-class APILoginView(APIView):
-    permission_classes = [AllowAny]
+class APILoginView(generics.GenericAPIView):
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data)
@@ -46,8 +49,8 @@ class APILoginView(APIView):
             }, status=status.HTTP_200_OK)
         return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
-class APILogoutView(APIView):
-    permission_classes = [IsAuthenticated]
+class APILogoutView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         request.user.auth_token.delete()
@@ -55,8 +58,8 @@ class APILogoutView(APIView):
 
 
 # ------------------- PROFILE -------------------
-class ProfileView(APIView):
-    permission_classes = [IsAuthenticated]
+class ProfileView(generics.RetrieveAPIView, generics.UpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         user = request.user
@@ -73,7 +76,7 @@ class ProfileView(APIView):
     
 # ------------------- FOLLOW/UNFOLLOW -------------------
 class FollowUserView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         # The target user to follow
@@ -101,7 +104,7 @@ class FollowUserView(APIView):
 
 
 class UnfollowUserView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request, user_id):
         target_user = get_object_or_404(User, id=user_id)
@@ -123,3 +126,8 @@ class UnfollowUserView(APIView):
             {"message": f"You have unfollowed {target_user.username}."},
             status=status.HTTP_200_OK
         )    
+        
+class UserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
