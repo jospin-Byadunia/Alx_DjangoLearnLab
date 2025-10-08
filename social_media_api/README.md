@@ -76,3 +76,34 @@ Posts API endpoint
 | `/api/posts/{id}/` | PUT    | Update a post (author only)           |
 | `/api/posts/{id}/` | PATCH  | Partially update a post (author only) |
 | `/api/posts/{id}/` | DELETE | Delete a post (author only)           |
+
+
+## 👥 Follow and Unfollow Users
+
+### Overview
+Authenticated users can follow or unfollow other users.  
+Each user has two relationship fields:
+- **followers** → users who follow them  
+- **following** → users they follow  
+
+These endpoints update those relationships accordingly.
+
+---
+
+### 🔐 Authentication
+All requests require a valid **JWT token** in the `Authorization` header.
+
+
+---
+
+### 📌 Endpoints
+
+#### 1️⃣ Follow a User
+**URL:** `/api/accounts/follow/<user_id>/`  
+**Method:** `POST`  
+**Permissions:** `IsAuthenticated`
+
+**Request Example**
+```bash
+POST /api/accounts/follow/5/
+Authorization: Bearer <access_token>

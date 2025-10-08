@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 # Custom permission to allow only owners to edit/delete
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -40,3 +42,16 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+# -------------------- User Feed --------------------
+
+class UserFeedView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        following_users = user.following.all()
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
