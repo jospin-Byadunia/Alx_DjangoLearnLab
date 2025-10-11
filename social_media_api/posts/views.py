@@ -86,8 +86,8 @@ class LikePostView(APIView):
         if Like.objects.filter(user=user, post=post).exists():
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Like.objects.get_or_create(user=user, post=post)
-        # Create a notification for the post author
+        Like.objects.get_or_create(user=request.user, post=post)
+        # Create a notification for the post author 
         if post.author != user:
             Notification.objects.create(
                 recipient=post.author,
