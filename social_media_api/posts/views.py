@@ -8,6 +8,7 @@ from rest_framework import status
 from notifications.models import Notification
 from django.contrib.contenttypes.models import ContentType
 from accounts.models import User
+from rest_framework import generics
 
 
 # Custom permission to allow only owners to edit/delete
@@ -79,13 +80,13 @@ class UserFeedView(APIView):
 class LikePostView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     def post(self, request, pk):
-        post = get_object_or_404(Post, pk=pk)
+        post = generics.get_object_or_404(Post, pk=pk)
         user = request.user
 
         if Like.objects.filter(user=user, post=post).exists():
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
-        Like.objects.create(user=user, post=post)
+        Like.objects.get_or_create(user=user, post=post)
         # Create a notification for the post author
         if post.author != user:
             Notification.objects.create(
