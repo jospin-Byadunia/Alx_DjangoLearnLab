@@ -28,4 +28,4 @@ class Comment(models.Model):
     
 class Like(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='Likes')
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='Likes')
