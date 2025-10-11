@@ -107,3 +107,18 @@ All requests require a valid **JWT token** in the `Authorization` header.
 ```bash
 POST /api/accounts/follow/5/
 Authorization: Bearer <access_token>
+
+
+## 🚀 Likes and Notifications Functionality
+
+### 1️⃣ Likes System
+Users can like or unlike posts through dedicated endpoints.
+
+**Endpoints**
+- `POST /posts/<int:pk>/like/` → Like a post  
+- `POST /posts/<int:pk>/unlike/` → Unlike a post  
+
+**Example Request**
+```json
+POST /posts/1/like/
+Authorization: Bearer <token>

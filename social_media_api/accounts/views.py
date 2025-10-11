@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import get_user_model
+from notifications.models import Notification
 
 
 CustomUser = get_user_model()
@@ -97,6 +98,13 @@ class FollowUserView(APIView):
             )
 
         request.user.following.add(target_user)
+        # Create a notification for the target user
+        Notification.objects.create(
+            recipient=target_user,
+            actor=request.user,
+            verb="started following you",
+        )
+
         return Response(
             {"message": f"You are now following {target_user.username}."},
             status=status.HTTP_200_OK
